@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+    <!--一般xmlns的版本和Spring版本一致-->
+    <!--上面的xsd最好和当前使用的Spring版本号一致,如果换了Spring版本,这个最好也跟着改-->
+
+    <!-- 引入属性文件 放在最开头,在使用spring之前就引入,里面的变量才能被引用-->
+    <context:property-placeholder location="classpath*:properties/*.properties"/>
+
+    <!--
+    引入属性文件也可以用这种写法
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:config.properties" />
+    </bean>
+    -->
+
+    <!-- 自动扫描(需要自动注入的类，对于那些类上有注解：@Repository、@Service、@Controller、@Component都进行注入) -->
+    <!--因为 Spring MVC 是 Spring 的子容器，所以我们在 Spring MVC 的配置中再指定扫描 Controller 的注解，这里是父容器的配置地方-->
+    <!--注解注入的相关材料可以看：-->
+    <!--http://blog.csdn.net/u012763117/article/details/17253849-->
+    <!--http://casheen.iteye.com/blog/295348-->
+    <!--http://blog.csdn.net/zhang854429783/article/details/6785574-->
+   <!-- <context:component-scan base-package="com.youmeek.**.service,com.youmeek.**.dao"/>-->
+<!--这里只要配置着服务的接口,会自动扫描子包，数据dao会自动注入的-->
+    <context:component-scan base-package="com.kbms_module.service"/>
+</beans>

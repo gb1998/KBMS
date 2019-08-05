@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kbms_module.dao.UserDao" >
+    <!--根据用户名选择出User全部属性-->
+    <select id="selectUserbyname" resultType="com.kbms_module.pojo.User">
+        select * from user where user_name=#{username}
+    </select>
+    <select id="selectUsernamebyEmail" resultType="com.kbms_module.pojo.User">
+        select * from user where user_email=#{email}
+    </select>
+    <insert id="insert_user" parameterType="com.kbms_module.pojo.User">
+        insert into user(user_name,user_password,user_email,user_acode,user_active,user_imgid) values (#{userName},#{userPassword},#{userEmail},#{userAcode},#{userActive},#{userImgid})
+    </insert>
+    <select id="selectcountbycode" parameterType="String" resultType="Integer">
+         select count(1) from user where user_acode=#{userAcode} and user_active=0
+    </select>
+    <select id="selectUserbyId" resultType="com.kbms_module.pojo.User" parameterType="Integer">
+        select * from user where user_id=#{id}
+    </select>
+    <select id="selectAllCollection" resultType="com.kbms_module.pojo.Collection">
+        select * from collection where  collection_userid=#{userId}
+    </select>
+
+    <update id="updateactive" parameterType="String">
+        update user set  user_active=1 where user_acode=#{userAcode}
+    </update>
+
+</mapper>

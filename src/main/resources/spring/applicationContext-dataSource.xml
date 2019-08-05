@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+    <!--上面的xsd最好和当前使用的Spring版本号一致,如果换了Spring版本,这个最好也跟着改-->
+
+    <!--
+    使用dbcp连接方式,需要导入commons-dbcp的架包(版本:1.2.2)
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="${data_source_url}" />
+        <property name="username" value="${data_source_username}" />
+        <property name="password" value="${data_source_passworddata_source_password}" />
+        &lt;!&ndash; 初始化连接大小 &ndash;&gt;
+        <property name="initialSize" value="0"></property>
+        &lt;!&ndash; 连接池最大数量 &ndash;&gt;
+        <property name="maxActive" value="20"></property>
+        &lt;!&ndash; 连接池最大空闲 &ndash;&gt;
+        <property name="maxIdle" value="20"></property>
+        &lt;!&ndash; 连接池最小空闲 &ndash;&gt;
+        <property name="minIdle" value="1"></property>
+        &lt;!&ndash; 获取连接最大等待时间 &ndash;&gt;
+        <property name="maxWait" value="60000"></property>
+    </bean>
+    -->
+
+    <!-- 使用阿里的druid配置数据源 start-->
+    <!--具体查看官网信息：https://github.com/alibaba/druid/wiki/%E9%85%8D%E7%BD%AE_DruidDataSource%E5%8F%82%E8%80%83%E9%85%8D%E7%BD%AE-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!--这三个变量读取config.properties的-->
+        <property name="url" value="${data_source_url}"/>
+        <property name="username" value="${data_source_username}"/>
+        <property name="password" value="${data_source_password}"/>
+
+        <!-- 初始化连接大小 -->
+        <property name="initialSize" value="1"/>
+        <!-- 初始化连接池最大使用连接数量 -->
+        <property name="maxActive" value="20"/>
+        <!-- 初始化连接池最小空闲 -->
+        <property name="minIdle" value="1"/>
+
+        <!-- 获取连接最大等待时间，单位毫秒-->
+        <property name="maxWait" value="60000"/>
+
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="25200000"/>
+
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <!--如果用Oracle，则把poolPreparedStatements配置为true，mysql可以配置为false。分库分表较多的数据库，建议配置为false。-->
+        <property name="poolPreparedStatements" value="false" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+
+       <!-- <property name="validationQuery" value="${validation_query}"/>-->
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+
+
+        <!--当程序存在缺陷时，申请的连接忘记关闭，这时候，就存在连接泄漏了。Druid提供了RemoveAbandanded相关配置，用来关闭长时间不使用的连接-->
+        <!--配置removeAbandoned对性能会有一些影响，建议怀疑存在泄漏之后再打开。在上面的配置中，如果连接超过30分钟未关闭，就会被强行回收，并且日志记录连接申请时的调用堆栈。-->
+        <!--具体查看官网信息：https://github.com/alibaba/druid/wiki/%E8%BF%9E%E6%8E%A5%E6%B3%84%E6%BC%8F%E7%9B%91%E6%B5%8B-->
+        <!-- 打开removeAbandoned功能 -->
+        <property name="removeAbandoned" value="true"/>
+        <!-- 1800秒，也就是30分钟 -->
+        <property name="removeAbandonedTimeout" value="1800"/>
+        <!-- 关闭abanded连接时输出错误日志 -->
+        <property name="logAbandoned" value="true"/>
+
+        <!-- 配置监控统计拦截的filters-->
+        <!--官网信息：https://github.com/alibaba/druid/wiki/%E9%85%8D%E7%BD%AE_StatFilter-->
+        <!--mergeSql可以合并输出的sql，方便查看，但是在mybatis框架中使用这个则无法监控sql,需要用stat-->
+        <!--<property name="filters" value="mergeSql,log4j"/>-->
+        <!--<property name="filters" value="mergeSql,wall"/>-->
+        <!--<property name="filters" value="stat"/>-->
+        <!--<property name="filters" value="mergeSql"/>-->
+        <property name="filters" value="stat,log4j"/>
+    </bean>
+    <!-- 使用阿里的druid配置数据源 end-->
+
+
+</beans>

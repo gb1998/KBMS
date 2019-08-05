@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+    <!--上面的xsd最好和当前使用的Spring版本号一致,如果换了Spring版本,这个最好也跟着改-->
+
+    <!-- Druid 和 Spring 关联监控配置 start-->
+    <!-- 具体可以查阅官网：https://github.com/alibaba/druid/wiki/%E9%85%8D%E7%BD%AE_Druid%E5%92%8CSpring%E5%85%B3%E8%81%94%E7%9B%91%E6%8E%A7%E9%85%8D%E7%BD%AE-->
+    <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor" />
+    <bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut" scope="prototype">
+        <property name="patterns">
+            <list>
+                <value>com.kbms_module.service</value>
+               <!-- <value>com.youmeek.ssm.module.*.service.*</value>-->
+                <!--如果使用的是 hibernate 则这里也要扫描路径，但是 mybatis 不需要-->
+                <!--<value>com.youmeek.ssm.module.*.dao.*</value>-->
+            </list>
+        </property>
+    </bean>
+
+    <aop:config proxy-target-class="true">
+        <!-- pointcut-ref="druid-stat-pointcut" 这个报红没事-->
+        <aop:advisor advice-ref="druid-stat-interceptor" pointcut-ref="druid-stat-pointcut" />
+    </aop:config>
+    <!-- Druid 和 Spring 关联监控配置 end-->
+
+
+    <!-- (事务管理器)transaction manager, use JtaTransactionManager for global tx -->
+    <!--http://www.mybatis.org/spring/zh/transactions.html-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+
+    <!-- 一种方式:注解方式配置事物,扫描@Transactional注解的类定义事务，配置上service实现类(下面还有一个方法名拦截方式,两个同时配置也是可以使用的，但是不建议两者一起使用) -->
+    <!--<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>-->
+
+    <!-- 一种方式:拦截器方式配置事物start 配置了该方式之后,在方法里面使用注解方式配置事务也是没有作用的 -->
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!--以这些单词开头的方法自动加入事务-->
+            <!--更多参数和使用方法可以参考:-->
+            <!--http://wuhenjia.blog.163.com/blog/static/93469449201123010594395-->
+            <!--http://baobao707.iteye.com/blog/415446-->
+            <!--http://jinnianshilongnian.iteye.com/blog/1442376-->
+            <!--http://winters1224.blog.51cto.com/3021203/807500-->
+            <!--如果是方法中直接抛顶层Exception异常的话,propagation="REQUIRED"是不顶用的,还需要配置rollback-for属性-->
+
+
+            <!--<tx:method name="delete*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" no-rollback-for="java.lang.RuntimeException"/>-->
+            <!--<tx:method name="insert*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.RuntimeException" />-->
+            <!--<tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" /> -->
+
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="register*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="modify*" propagation="REQUIRED"/>
+            <tx:method name="edit*" propagation="REQUIRED"/>
+            <tx:method name="batch*"  propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="remove*" propagation="REQUIRED"/>
+            <tx:method name="time*" propagation="REQUIRED"/><!--定时器方法-->
+            <tx:method name="repair" propagation="REQUIRED"/>
+            <tx:method name="deleteAndRepair" propagation="REQUIRED"/>
+
+            <!--以这些单词开头的方法不加入事务-->
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="load*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="search*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="datagrid*" propagation="SUPPORTS" read-only="true"/>
+
+            <tx:method name="*" propagation="SUPPORTS"/>
+        </tx:attributes>
+    </tx:advice>
+
+
+    <aop:config>
+        <!--把这个拦截器配置到com.youmeek.ssh.service下(包括子包)下的以impl目录下类的,任意方法-->
+        <!--
+        execution的语法表示:在impl包中定义的任意方法的执行，更多方式可以参考：
+        http://lavasoft.blog.51cto.com/62575/172292/
+        http://blog.csdn.net/partner4java/article/details/7015946
+        -->
+        <aop:pointcut id="transactionPointcut" expression="execution(* com.kbms_module.*.service.impl.*.*(..))"/>
+       <!-- <aop:pointcut id="transactionPointcut" expression="execution(* com.youmeek.ssm.module.*.service.impl.*.*(..) )"/>-->
+        <!--<aop:pointcut id="transactionPointcut" expression="execution(* *..*Service*.*(..))"/>-->
+        <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>
+    </aop:config>
+    <!--一种方式:拦截器方式配置事物end-->
+
+</beans>

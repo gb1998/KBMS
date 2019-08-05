@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+    <!--上面的xsd最好和当前使用的Spring版本号一致,如果换了Spring版本,这个最好也跟着改-->
+
+
+    <!-- spring和MyBatis整合，不需要mybatis的配置映射文件 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 自动扫描 dao.xml文件(读取的是编译出来的classes目录下的module目录下的具体模块的mapping目录下的任意xml文件) -->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+        <!--最新mybatis的配置文件位置-->
+        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"></property>
+    </bean>
+
+    <!-- dao 接口所在包名，Spring会自动查找其下的类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+       <!-- <property name="basePackage" value="com.youmeek.ssm.module.*.dao"/>-->
+        <property name="basePackage" value="com.kbms_module.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+    <!-- 使用ehcache缓存 -->
+    <bean id="ehCacheManage" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:mybatis/ehcache.xml" />
+    </bean>
+
+
+</beans>

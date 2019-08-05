@@ -1,0 +1,363 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: hncta
+  Date: 2018-04-06
+  Time: 13:13
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>${fileInfo.title}</title>
+    <%@include file="../common/h.jsp"%>
+    <!--浏览的主体高为500px-->
+    <style type="text/css">
+        #main-content {
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+  <%@include file="../common/head.jsp"%>
+  <div class="am-cf admin-main" style="padding-top:80px">
+      <!-- sidebar start -->
+      <!-- sidebar end -->
+      <!-- content start -->
+      <div class="admin-content">
+          <div class="admin-content-body">
+              <div class="am-cf am-padding">
+                  <div class="am-fl am-cf">
+                      <strong class="am-text-primary am-text-lg"><a>资源在线预览</a></strong>
+                      / <small>${fileInfo.title }.${fileInfo.exname }</small>
+                  </div>
+              </div>
+              <div class="am-u-sm-12">
+                  <div class="am-u-md-12 am-u-sm-12 am-u-lg-8">
+                      <div class="am-panel am-panel-default">
+                          <div class="am-panel-bd am-collapse am-in">
+                              <div id="main-content"></div>
+                          </div>
+                      </div>
+                      <div class="am-panel am-panel-default">
+                          <div class="am-panel-hd">评论</div>
+                          <!-- 多说评论框 start -->
+                          <div class="ds-thread" data-thread-key="${fileInfo.id }"
+                               data-title="${fileInfo.title }" <%--data-url="lib/user/file/${fileInfo.fileuuid }"--%>></div>
+                          <!-- 多说评论框 end -->
+                          <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+                          <script type="text/javascript">
+                              var duoshuoQuery = {
+                                  short_name : "knowall"
+                              };
+                              (function() {
+                                  var ds = document.createElement('script');
+                                  ds.type = 'text/javascript';
+                                  ds.async = true;
+                                  ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                                  ds.charset = 'UTF-8';
+                                  (document.getElementsByTagName('head')[0]
+                                      || document.getElementsByTagName('body')[0]).appendChild(ds);
+                              })();
+                          </script>
+                          <!-- 多说公共JS代码 end -->
+                      </div>
+                  </div>
+
+                  <div class="am-u-md-12 am-u-sm-12 am-u-lg-4">
+                      <div class="am-panel am-panel-default">
+
+                          <div class="am-panel-hd am-cf"
+                               data-am-collapse="{target: '#collapse-panel-file-info1'}"
+                               title="${fileInfo.title }.${fileInfo.exname }">
+                              ${fileInfo.title }.${fileInfo.exname } <span
+                                  class="am-icon-chevron-down am-fr"></span>
+                          </div>
+                          <div class="am-panel-bd am-collapse am-in am-cf"
+                               id="collapse-panel-file-info1">
+
+                              <ul class="am-list admin-content-file">
+                                  <li>
+                                      <p>
+                                          <span class="am-badge am-badge-secondary">上传用户</span>
+                                         ${fileInfo.cusername}
+                                      </p>
+
+                                  </li>
+
+                                  <li>
+                                      <p>
+                                          <span class="am-badge am-badge-secondary">大小</span>
+                                          ${fileSize}
+                                      </p>
+                                  </li>
+
+                                  <li>
+                                      <p>
+                                          <span class="am-badge am-badge am-badge-secondary">类别</span>
+                                         ${btypename}/${stypename}
+                                      </p>
+                                  </li>
+                                  <li>
+                                      <p>
+                                          <span class="am-badge am-badge-secondary">上传时间</span>
+                                          <fmt:formatDate value="${fileInfo.createtime }"
+                                                          pattern="yyyy-MM-dd HH:mm:ss" />
+                                      </p>
+                                  </li>
+                                  <li>
+                                      <p>
+                                          <span class="am-badge am-badge-secondary">简介</span>
+                                          ${describle}
+                                      </p>
+
+                                  </li>
+                                  <li>
+                                      <div class="am-btn-group am-btn-group-xs">
+                                          <button type="button" id="fork" class="am-btn am-btn-default"
+                                                  onclick="findDoc()">
+                                              <span class="am-icon-archive"></span> <span id="shoucang">收藏</span>
+                                          </button>
+                                          <a
+                                                   href="file/download/${fileInfo.fileuuid}/${fileInfo.exname}"
+                                                  type="button" class="am-btn am-btn-default"> <span
+                                                  class="am-icon-trash-o"></span> 下载
+                                          </a>
+                                      </div>
+                                  </li>
+                              </ul>
+                          </div>
+
+                      </div>
+                      <div class="am-panel am-panel-default">
+                          <div class="am-panel-hd am-cf"
+                               data-am-collapse="{target: '#collapse-panel-link-file'}">
+                              关联文档<span class="am-icon-chevron-down am-fr"></span>
+                          </div>
+                          <div class="am-panel-bd am-collapse am-in am-cf"
+                               id="collapse-panel-link-file">
+                              <table class="am-table am-table-bdrs">
+                                  <tbody id="relation-files">
+
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+  </div>
+  <!-- 模态窗口 -->
+  <div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-1">
+      <div class="am-modal-dialog">
+          <div class="am-modal-hd">
+              收藏文件 <a href="javascript: void(0)" class="am-close am-close-spin"
+                      data-am-modal-close>&times;</a>
+          </div>
+          <div class="am-modal-bd">
+
+              <div class="am-form">
+                  <div class="am-g am-margin-top-sm">
+
+                      <div class="am-u-sm-3   am-text-left ">名称:</div>
+                      <div class="am-u-sm-8 am-u-end">
+                          <input type="text" class="am-input-sm"
+                                 value="${fileInfo.title}.${fileInfo.exname }"
+                                 readonly="readonly">
+                      </div>
+
+                      <div class="am-u-sm-3  am-text-left" style="margin-top: 10px;">文件夹:</div>
+                      <div class="am-u-sm-8 am-u-end"
+                           style="margin-top: 10px; margin-left: -10px;">
+                          <select id="select" data-am-selected="{searchBox: 1}">
+
+                          </select>
+                      </div>
+
+                      <div class="am-u-sm-3  am-text-left"
+                           style="margin-top: 10px; margin-bottom: 10px;">备注:</div>
+                      <div class="am-u-sm-8  am-u-end"
+                           style="margin-top: 10px; margin-bottom: 10px;">
+							<textarea rows="2" id="forkNote" required="required"
+                                      placeholder="文件备注"></textarea>
+                      </div>
+
+
+                      <div class="am-margin">
+                          <button type="button" onclick="submit()"
+                                  class="am-btn am-btn-primary am-btn-xs" data-am-modal-close>提交保存</button>
+                          <button type="button" class="am-btn am-btn-primary am-btn-xs"
+                                  data-am-modal-close>放弃保存</button>
+                      </div>
+                  </div>
+
+
+              </div>
+
+          </div>
+
+      </div>
+  </div>
+  <div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1"
+       id="my-modal-loading">
+      <div class="am-modal-dialog">
+          <div class="am-modal-hd">保存成功</div>
+          <div class="am-modal-bd">
+              <span class="am-icon-spinner am-icon-spin"></span>
+          </div>
+      </div>
+  </div>
+
+
+</body>
+<script src="${pageContext.request.contextPath}/resource/script/pdfobject.min.js"></script>
+<script type="text/javascript" src="resource/ckplayer/ckplayer.js"
+        charset="utf-8"></script>
+
+
+<script type="text/javascript">
+    //操作收藏的js
+    var forkId1=0;
+    $(window).load(function() {
+        fileId=${fileInfo.id};
+        $.ajax({
+
+            url : "user/judgeFork",
+            type : "POST",
+            data:{fileId:fileId},
+            datatype : "json",
+            //ansyn : false,
+            success : function(JsonResult) {
+                /* var len=JsonResult.data.length;
+                var docInfos=JsonResult.data; */
+                if(JsonResult.success==false)
+                {
+                    $("#shoucang").text("已收藏");
+                    $("#fork").addClass("am-active");
+                    forkId1=JsonResult.data;
+                }else{
+
+                    $("#fork").attr("data-am-modal","{target: '#doc-modal-1', closeViaDimmer: 0, width: 400, height: 260}");
+                }
+            }
+        })
+    });
+    function findDoc(){
+        //文档已经收藏了
+        if($("#shoucang").text()=="已收藏")
+        {
+            $.ajax({
+                url : "user/deleteFork",
+                data:{forkId:forkId1},
+                type : "POST",
+                datatype : "json",
+                //ansyn : false,
+                success : function(JsonResult) {
+                    /* var len=JsonResult.data.length;
+                    var docInfos=JsonResult.data; */
+                    //alert("取消收藏");
+                    $("#fork").removeClass("am-active");
+                    $("#shoucang").text("收藏");
+                    $("#fork").attr("data-am-modal","{target: '#doc-modal-1', closeViaDimmer: 0, width: 400, height: 260}");
+                }
+            })
+        }
+        $.ajax({
+            url : "user/findAllByUserId",
+            type : "get",
+            datatype : "json",
+            //ansyn : false,
+            success : function(data) {
+                var len=data.len;
+                var docInfos=data.data;
+              /*  alert(len);
+                alert(docInfos[0].collectionId);
+                alert(docInfos[0].collectionName);*/
+                var innerStr="";
+                $('#select').empty();
+                for(var i=0;i<len;i++)
+                {
+                    if(i==0){
+                        innerStr += "<option value='" + docInfos[i].collectionId
+                            + "' selected='selected'>"
+                            + docInfos[i].collectionName + "</option>"
+                    }else{
+                        innerStr += "<option value='" + docInfos[i].collectionId
+                            + "'>"
+                            + docInfos[i].collectionName + "</option>"
+                    }
+                }
+                $('#select').append(innerStr);
+            }
+        })
+    }
+    function submit(){
+        docId=$("#select").val();
+        docName=$("#select").text();
+        forkNote=$("#forkNote").val();
+        alert(forkNote);
+        alert(docName);
+        if(forkNote==null||forkNote=="")
+        {
+            forkNote="无";
+        }
+        fileId=${fileInfo.id};
+        $.ajax({
+            url : "user/insertFork",
+            data:{collectionId:docId,forkDesciption:forkNote,fileId:fileId},
+            type : "POST",
+            datatype : "json",
+            //ansyn : false,
+            success : function(data) {
+                /* var len=JsonResult.data.length;
+                var docInfos=JsonResult.data; */
+                //alert(JsonResult.error);
+                $("#shoucang").text("已收藏");
+                $("#fork").addClass("am-active");
+                $("#fork").removeAttr("data-am-modal");
+                forkId1=data.data;
+            }
+        })
+
+
+    }
+
+    var mainFileId = ${fileInfo.id};
+    //关联文档的获取
+    function getRelation(){
+        $("#relation-files").hide();
+
+        $.post("user/get-relations/"+mainFileId,function(data){
+            var str = "";
+            for (var i = 0; i < data.data.length; i++) {
+                str += "<tr><td><a target='_blank' title='点击预览' href='user/file/" + data.data[i].relationFile.fileUuid + "'><img src='user/thumbnail/"+
+                    data.data[i].relationFile.fileUuid+"/png' width='30' height='30' alt='...' class='am-img-thumbnail am-radius'>  "
+                    + data.data[i].relationFile.fileName + "." + data.data[i].relationFile.fileExt + "</a></td>"
+                    +"</tr>";
+            }
+
+            $("#relation-files").html(str);
+            if(data.data.length == 0){
+                $("#relation-files").html("无关联文档...");
+            }
+            $("#relation-files").show("fast");
+
+        })
+    }
+    //执行获取关联文档
+    getRelation();
+    //------------------------
+    var ext = "${fileInfo.exname}";
+    var uuid = "${fileInfo.fileuuid}";
+    //判断是哪种浏览方式在网页中呈现
+    //页面显示js
+    var host = location.host; // 192.168.1.104
+    host = host.substring(0, host.indexOf(':'));
+    //接受文件流
+    var fileUrl = "thumbnail/" + "${fileInfo.fileuuid}" + "/";
+    var readUrl = "thumbnail/" + "${fileInfo.fileuuid}" + "/"+"${fileInfo.exname}";
+    var $content = $("#main-content");
+</script>
+<script src="resource/script/file-view.js"></script>
+</html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+   <!--配置安全管理器-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+     <!--数据源-->
+        <property name="realm">
+            <bean class="com.kbms_module.shiro.realm.MyAccountrealm"></bean>
+        </property>
+        <!--自定义SubjectFactory-->
+        <!--<property name="subjectFactory">
+            <bean class=" "></bean>
+        </property>-->
+
+    </bean>
+    <!--配置shiro 拦截器,需要与web.xml里面的名称相同-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+      <property name="loginUrl" value="/login"/>
+      <property name="successUrl"  value="/home"/>
+      <property name="unauthorizedUrl" value="/error/unauthorized.html"/>
+
+       <property name="filterChainDefinitions" >
+           <value>
+               <!--配置具体的拦截请求-->
+           </value>
+       </property>
+
+    </bean>
+     <!--自定义authc,并配置loginurl-->
+    <!--<bean id="authc" class="">
+        <property name="loginUrl" value="/login"/>
+    </bean>-->
+
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+
+
+
+</beans>

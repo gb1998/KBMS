@@ -1,0 +1,34 @@
+2019-01-04 21:47:11,034 [0.0.0.0-startStop-1] INFO  ROOT - Starting up context: oflaDemo
+2019-01-04 21:47:13,793 [Loader:/oflaDemo] DEBUG org.red5.demos.oflaDemo.Application - start: Scope [name=oflaDemo, path=/default, type=APPLICATION, autoStart=true, creationTime=1546609633788, depth=1, enabled=true, running=false]
+2019-01-04 21:47:13,795 [Loader:/oflaDemo] DEBUG org.red5.demos.oflaDemo.Application - appStart: Scope [name=oflaDemo, path=/default, type=APPLICATION, autoStart=true, creationTime=1546609633788, depth=1, enabled=true, running=false]
+2019-01-04 21:47:13,797 [Loader:/oflaDemo] INFO  org.red5.demos.oflaDemo.Application - oflaDemo appStart
+2019-01-04 21:47:13,807 [Loader:/oflaDemo] INFO  org.red5.demos.oflaDemo.DemoService - oflaDemo DemoService created
+2019-01-04 21:47:18,638 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - connect: RTMPMinaConnection from 0:0:0:0:0:0:0:1 (in: 3475 out: 3073) session: 8NCNPKOZFP7LB state: connected > Scope [name=oflaDemo, path=/default, type=APPLICATION, autoStart=true, creationTime=1546609633788, depth=1, enabled=true, running=true]
+2019-01-04 21:47:18,640 [RTMPConnectionExecutor-1] INFO  org.red5.demos.oflaDemo.Application - W3C x-category:session x-event:connect c-ip:0:0:0:0:0:0:0:1 c-client-id:0
+2019-01-04 21:47:18,640 [RTMPConnectionExecutor-1] INFO  org.red5.demos.oflaDemo.Application - oflaDemo appConnect
+2019-01-04 21:47:18,646 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - App connect called for scope: oflaDemo
+2019-01-04 21:47:18,653 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - Connection property: app = oflaDemo
+2019-01-04 21:47:18,654 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - Connection property: flashVer = WIN 32,0,0,101
+2019-01-04 21:47:18,654 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - Connection property: swfUrl = http://localhost:8080/kbms/resource/ckplayer/ckplayer.swf/[[DYNAMIC]]/1
+2019-01-04 21:47:18,654 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - Connection property: tcUrl = rtmp://localhost/oflaDemo
+2019-01-04 21:47:18,655 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - Connection property: fpad = false
+2019-01-04 21:47:18,655 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - Connection property: capabilities = 239.0
+2019-01-04 21:47:18,655 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - Connection property: audioCodecs = 3575.0
+2019-01-04 21:47:18,655 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - Connection property: videoCodecs = 252.0
+2019-01-04 21:47:18,655 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - Connection property: videoFunction = 1.0
+2019-01-04 21:47:18,655 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - Connection property: pageUrl = http://localhost:8080/kbms/file/3e722d37-d41d-4da1-9e3e-9f925e3d325d
+2019-01-04 21:47:18,656 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - Connection property: objectEncoding = 0.0
+2019-01-04 21:47:18,656 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - Connection property: path = oflaDemo
+2019-01-04 21:47:18,656 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - appConnect: RTMPMinaConnection from 0:0:0:0:0:0:0:1 (in: 3475 out: 3073) session: 8NCNPKOZFP7LB state: connected
+2019-01-04 21:47:18,657 [RTMPConnectionExecutor-1] DEBUG org.red5.demos.oflaDemo.Application - appJoin: Client: 0 >> Scope [name=oflaDemo, path=/default, type=APPLICATION, autoStart=true, creationTime=1546609633788, depth=1, enabled=true, running=true]
+2019-01-04 21:47:19,019 [Red5_Scheduler_Worker-17] INFO  org.red5.demos.oflaDemo.Application - W3C x-category:stream x-event:play c-ip:0:0:0:0:0:0:0:1 x-sname:66ffe3c0-0207-438a-bfef-2784c7157196
+2019-01-04 21:47:19,618 [Red5_Scheduler_Worker-18] INFO  org.red5.demos.oflaDemo.Application - W3C x-category:stream x-event:play c-ip:0:0:0:0:0:0:0:1 x-sname:66ffe3c0-0207-438a-bfef-2784c7157196 x-name:3e722d37-d41d-4da1-9e3e-9f925e3d325d.mp4
+2019-01-04 21:47:19,849 [Red5_Scheduler_Worker-8] INFO  org.red5.demos.oflaDemo.Application - W3C x-category:stream x-event:pause c-ip:0:0:0:0:0:0:0:1 x-sname:66ffe3c0-0207-438a-bfef-2784c7157196
+2019-01-04 21:47:22,718 [Red5_Scheduler_Worker-11] INFO  org.red5.demos.oflaDemo.Application - W3C x-category:stream x-event:unpause c-ip:0:0:0:0:0:0:0:1 x-sname:66ffe3c0-0207-438a-bfef-2784c7157196
+2019-01-04 21:47:41,472 [NioProcessor-2] DEBUG org.red5.demos.oflaDemo.Application - disconnect: RTMPMinaConnection from 0:0:0:0:0:0:0:1 (in: 3782 out: 2304851) session: 8NCNPKOZFP7LB state: disconnecting < Scope [name=oflaDemo, path=/default, type=APPLICATION, autoStart=true, creationTime=1546609633788, depth=1, enabled=true, running=true]
+2019-01-04 21:47:41,473 [NioProcessor-2] INFO  org.red5.demos.oflaDemo.Application - W3C x-category:session x-event:disconnect c-ip:0:0:0:0:0:0:0:1 c-client-id:0
+2019-01-04 21:47:41,476 [NioProcessor-2] INFO  org.red5.demos.oflaDemo.Application - oflaDemo appDisconnect
+2019-01-04 21:47:41,476 [NioProcessor-2] DEBUG org.red5.demos.oflaDemo.Application - appDisconnect: RTMPMinaConnection from 0:0:0:0:0:0:0:1 (in: 3782 out: 2304851) session: 8NCNPKOZFP7LB state: disconnecting
+2019-01-04 21:47:41,477 [NioProcessor-2] DEBUG org.red5.demos.oflaDemo.Application - leave: Client: 0 << Scope [name=oflaDemo, path=/default, type=APPLICATION, autoStart=true, creationTime=1546609633788, depth=1, enabled=true, running=true]
+2019-01-04 21:47:41,478 [NioProcessor-2] DEBUG org.red5.demos.oflaDemo.Application - appLeave: Client: 0 << Scope [name=oflaDemo, path=/default, type=APPLICATION, autoStart=true, creationTime=1546609633788, depth=1, enabled=true, running=true]
+2019-01-04 21:47:41,516 [Red5_Scheduler_Worker-9] INFO  org.red5.demos.oflaDemo.Application - W3C x-category:stream x-event:stop c-ip:0:0:0:0:0:0:0:1 cs-bytes:3782 sc-bytes:2304851 x-sname:66ffe3c0-0207-438a-bfef-2784c7157196

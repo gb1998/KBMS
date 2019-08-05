@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!--参考文章：-->
+    <!--http://blog.csdn.net/wangjunjun2008/article/details/18732019-->
+    <!--http://blog.csdn.net/evankaka/article/details/50637994-->
+
+
+    <!--======================================================-->
+
+
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
+    <!--Windows 可以使用类似：D:/log-->
+    <!--Linux 可以使用类似：/opt/tomcat/logs-->
+    <property name="LOG_HOME" value="E:/" />
+
+    <!--======================================================-->
+
+
+    <!--输出到控制台的设置-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] -- [%p] -- [%thread >>>> %F:%L >>>> Method = %M] -- [Content = %m]%n</Pattern>
+        </layout>
+    </appender>
+
+
+    <!-- 按照每天生成日志文件 -->
+    <appender name="FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的路径+文件名-->
+            <FileNamePattern>${LOG_HOME}/logbackOutFile.log.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] -- [%p] -- [%thread >>>> %F:%L >>>> Method = %M] -- [Content = %m]%n</pattern>
+        </encoder>
+        <!--日志文件最大的大小-->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <!--======================================================-->
+
+    <!--级别：ALL > TRACE > DEBUG > INFO > WARN > ERROR-->
+    <!--对特定目录或是类进行指定级别输出，而不使用root的级别-->
+    <logger name="com.kbms_module" level="TRACE"/>
+
+    <!--myibatis log configure-->
+    <logger name="com.apache.ibatis" level="TRACE"/>
+    <logger name="java.sql.Connection" level="DEBUG"/>
+    <logger name="java.sql.Statement" level="DEBUG"/>
+    <logger name="java.sql.PreparedStatement" level="DEBUG"/>
+
+
+    <!-- show parameters for hibernate sql 专为 Hibernate 定制 -->
+    <!--
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder"  level="TRACE" />
+    <logger name="org.hibernate.type.descriptor.sql.BasicExtractor"  level="DEBUG" />
+    <logger name="org.hibernate.SQL" level="DEBUG" />
+    <logger name="org.hibernate.engine.QueryParameters" level="DEBUG" />
+    <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG" />
+    -->
+
+    <!--======================================================-->
+
+    <!--默认所有级别是 debug，使用控制台和文件两种类型都进行输出输出，如果只要使用一种控制台输出的话，则下面把FILE那一行去掉即可-->
+    <root level="TRACE">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+
+
+
+</configuration>

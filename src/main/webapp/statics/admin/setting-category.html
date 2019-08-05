@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>KnowAll企业知识库</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="./css/x-admin.css" media="all">
+    <link rel="shortcut icon" href="../img/logo1%20(1).png">
+    <style>
+        body .layui-tree-skin-shihuang a{color: #00b4b3;}
+        body .layui-tree-skin-shihuang i{color: #00b4b3;}
+    </style>
+</head>
+<body>
+<div class="x-nav">
+            <span class="layui-breadcrumb">
+              <a><cite>首页</cite></a>
+              <a><cite>问答管理</cite></a>
+              <a><cite>问答管理</cite></a>
+              <a><cite>设置分类</cite></a>
+            </span>
+</div>
+<ul id="demo" style=""></ul>
+<script src="./lib/layui/layui.js" charset="utf-8"></script>
+<script src="./js/x-layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['element','tree','layer'], function(){
+        $ = layui.jquery;//jquery
+
+        layui.tree({
+            skin: 'shihuang',
+            elem: '#demo' //传入元素选择器
+            ,click: function(item){ //点击节点回调
+                layer.msg('当前节名称：'+ item.name + '<br>全部参数：'+ JSON.stringify(item));
+                console.log(item);
+            }
+            ,nodes: [{
+                name: '常用文件夹'
+                ,id: 1
+                ,alias: 'changyong'
+                ,children: [
+                    {
+                        name: '所有未读'
+                        ,id: 11
+                        ,href: 'http://www.layui.com/'
+                        ,alias: 'weidu'
+                    }, {
+                        name: '置顶邮件'
+                        ,id: 12
+                    }, {
+                        name: '标签邮件'
+                        ,id: 13
+                    }
+                ]
+            }, {
+                name: '我的邮箱'
+                ,id: 2
+//                ,spread: true 是否展开
+                ,children: [
+                    {
+                        name: 'QQ邮箱'
+                        ,id: 21
+                        ,children: [
+                        {
+                            name: '收件箱'
+                            ,id: 211
+                            ,children: [
+                            {
+                                name: '所有未读'
+                                ,id: 2111
+                            }, {
+                                name: '置顶邮件'
+                                ,id: 2112
+                            }, {
+                                name: '标签邮件'
+                                ,id: 2113
+                            }
+                        ]
+                        }, {
+                            name: '已发出的邮件'
+                            ,id: 212
+                        }, {
+                            name: '垃圾邮件'
+                            ,id: 213
+                        }
+                    ]
+                    }, {
+                        name: '阿里云邮'
+                        ,id: 22
+                        ,children: [
+                            {
+                                name: '收件箱'
+                                ,id: 221
+                            }, {
+                                name: '已发出的邮件'
+                                ,id: 222
+                            }, {
+                                name: '垃圾邮件'
+                                ,id: 223
+                            }
+                        ]
+                    }
+                ]
+            }
+                ,{
+                    name: '父节点2'
+                    ,children: [{
+                        name: '子节点21'
+                        ,children: [{
+                            name: '子节点211'
+                        }]
+                    }]
+                }]
+        });
+
+    });
+</script>
+
+</body>
+</html>
